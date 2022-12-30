@@ -1,4 +1,4 @@
-# (riverboat)
+# lichess-worldbeater
 ## Takes a lichess account ID and prints their record and win rate against each country.
 
 Queries two lichess.org API endpoints: 
