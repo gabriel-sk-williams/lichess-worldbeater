@@ -25,8 +25,12 @@ function streamGames(user, token) {
 
     const onMessage = (obj) => {
 
+      // console.log(obj);
       if (obj.players.white.hasOwnProperty('aiLevel') 
        || obj.players.black.hasOwnProperty('aiLevel')) return;
+
+      if (!obj.players.white.hasOwnProperty('user')
+      || !obj.players.black.hasOwnProperty('user')) return;
 
       const white = obj.players.white.user.id;
       const black = obj.players.black.user.id;
