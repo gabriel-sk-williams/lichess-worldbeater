@@ -13,7 +13,9 @@ const codes = Object.keys(cc.isoCountries);
 const vsWorld = async function() {
     const tracked = await query.streamGames(user, token);
     const opponents = Object.keys(tracked);
-    console.log(`${user}: ${Object.keys(opponents).length} unique opponents since 1 Jan 2022`);
+    console.log("")
+    console.log(`${user}: ${Object.keys(opponents).length} unique opponents since 1 Jan 2023`);
+    console.log("")
 
     var users = []
     for (let i = 0; i < opponents.length; i+=300) {
@@ -24,10 +26,10 @@ const vsWorld = async function() {
     }
     
     const hasProfile = users.filter(user => user.hasOwnProperty('profile'));
-    const hasCountry = hasProfile.filter(user => user.profile.hasOwnProperty('country'));
-    const hasValid = hasCountry.filter(user => codes.includes(user.profile.country));
+    const hasFlag = hasProfile.filter(user => user.profile.hasOwnProperty('flag'));
+    const hasValid = hasFlag.filter(user => codes.includes(user.profile.flag));
     const opponentMap = hasValid.reduce((acc, user) => Object.assign(acc, {
-        [user.id]: user.profile.country
+        [user.id]: user.profile.flag
     }), {});
 
     const countries = [... new Set(Object.values(opponentMap))];
@@ -36,30 +38,30 @@ const vsWorld = async function() {
     acc),{});
 
     for (id in opponentMap) {
-        const country = opponentMap[id];
+        const flag = opponentMap[id];
         const { win, loss, draw } = tracked[id];
-        tally[country].win += win;
-        tally[country].loss += loss;
-        tally[country].draw += draw;
+        tally[flag].win += win;
+        tally[flag].loss += loss;
+        tally[flag].draw += draw;
     }
 
     const totals = [];
-    for (country in tally) {
-        const { win, loss, draw } = tally[country];
+    for (flag in tally) {
+        const { win, loss, draw } = tally[flag];
         const total = win+loss+draw;
-        totals.push([country, total]);
+        totals.push([flag, total]);
     }
 
     const sortedTotals = Object.fromEntries(
         totals.sort(([,a],[,b]) => b-a)
     );
 
-    for (country in sortedTotals) {
-        const { win, loss, draw } = tally[country];
+    for (flag in sortedTotals) {
+        const { win, loss, draw } = tally[flag];
         const record = `${win}-${loss}-${draw}`;
         const percentage = (win/(win+loss+draw)*100).toFixed(0);
         const getName = new Intl.DisplayNames(['en'], { type: 'region' });
-        const regionName = getName.of(country);
+        const regionName = getName.of(flag);
         console.log(`${percentage}% win rate against ${regionName}. (${record})`);
     }
 }

@@ -3,15 +3,18 @@
 
 const fetch = require('node-fetch');
 
-const Jan2022 = 1640995200000;
-const Nov2022 = 1667265383000;
+//import { fetch } from "./node_modules/node-fetch"
+
+const Jan2023 = 1672560000000;
+const Jun2023 = 1685602800000;
+const Dec2023 = 1701417600000;
 
 function streamGames(user, token) {
 
     const tracker = {};
 
     const params = new URLSearchParams({
-      since: Jan2022
+      since: Jun2023
     });
 
     const streamheader = {
@@ -25,7 +28,6 @@ function streamGames(user, token) {
 
     const onMessage = (obj) => {
 
-      // console.log(obj);
       if (obj.players.white.hasOwnProperty('aiLevel') 
        || obj.players.black.hasOwnProperty('aiLevel')) return;
 
